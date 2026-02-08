@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qkzOAm9R/6g=",
+  "dgSpecHash": "m5b9tw5WHHU=",
   "success": true,
-  "projectFilePath": "D:\\Our projects\\hemant lab\\lab\\Angular\\udamy course\\ANGULAR and ASP.NET Core REST API - Real World Application\\bloger-api\\blog-api\\blog-api.csproj",
+  "projectFilePath": "D:\\Our projects\\hemant lab\\lab\\Angular\\udamy course\\ANGULAR and ASP.NET Core REST API - Real World Application\\blogger-api\\blog-api\\blog-api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Hemant\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Hemant\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
