@@ -33,7 +33,6 @@ app.UseCors(options =>
     options.AllowAnyMethod();
     options.AllowAnyMethod();
 
-
 });
 
 app.UseAuthorization();
