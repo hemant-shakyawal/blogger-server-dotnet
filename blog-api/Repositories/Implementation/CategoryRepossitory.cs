@@ -1,6 +1,7 @@
 ﻿using blog_api.Data;
 using blog_api.Models.Domain;
 using blog_api.Repositories.Inteface;
+using Microsoft.EntityFrameworkCore;
 
 namespace blog_api.Repositories.Implementation
 {
@@ -18,6 +19,11 @@ namespace blog_api.Repositories.Implementation
             await dbContext.SaveChangesAsync();
 
             return category;
+        }
+
+        public async Task<IEnumerable<Category>> GetAllAsync()
+        {
+           return await dbContext.Categories.ToListAsync();
         }
     }
 }
