@@ -19,7 +19,7 @@ namespace blog_api.Controllers
         }
         //
         [HttpPost]
-        public async Task<IActionResult> CreateCategory(CreateCategoryRequestDto request)// call the CreateCategoryRequestDto  from DTO
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequestDto request)// call the CreateCategoryRequestDto  from DTO
         {
             // Map DataTransferObject (DTO) to Domain Model
 
@@ -67,7 +67,23 @@ namespace blog_api.Controllers
             return Ok(response);
         }
 
-
+        //Get:https://localhost:7202/api/Categories/{Id}
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetCategoryById([FromRoute] Guid id)
+        {
+            var existingCategory = await categoryRepository.GetById(id);
+            if(existingCategory is null)
+            {
+                return NotFound();
+            }
+            var response =new CategoryDto { 
+                Id = existingCategory.Id,
+            Name = existingCategory.Name,
+            UrlHandle=existingCategory.UrlHandle
+            };
+            return Ok(response);
+        }
     }
 
 
