@@ -84,6 +84,39 @@ namespace blog_api.Controllers
             };
             return Ok(response);
         }
+
+
+
+        //Put:https://localhost:7202/api/Categories/{Id}
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult>EditCategory([FromRoute] Guid id,UpdateCategoryRequestDto request)
+        {
+            // Convert DTO to Domain Model
+            var category = new Category
+            {
+                Id = id,
+                Name = request.Name,
+                UrlHandle = request.UrlHandle,
+            };
+
+          category=await categoryRepository.UpdateAsync(category);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            // Convert Domain model to DTO
+            var response = new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle,
+            };
+
+            return Ok(response);
+        }
+
+
     }
 
 
