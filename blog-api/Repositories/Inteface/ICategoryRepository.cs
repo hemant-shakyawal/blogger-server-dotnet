@@ -10,5 +10,6 @@ namespace blog_api.Repositories.Inteface
 
         Task<Category?> GetById(Guid id);
         
+        Task<Category?>UpdateAsync(Category category);
     }
 }
