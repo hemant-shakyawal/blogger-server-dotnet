@@ -21,6 +21,8 @@ namespace blog_api.Repositories.Implementation
             return category;
         }
 
+      
+
         public async Task<IEnumerable<Category>> GetAllAsync()
         {
            return await dbContext.Categories.ToListAsync();
@@ -44,6 +46,17 @@ namespace blog_api.Repositories.Implementation
 
             }
             return null;
+        }
+        public async Task<Category?> DeleteAsync(Guid id)
+        {
+            var exitingCategory = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
+            if (exitingCategory is  null)
+            {
+                return null;
+            }
+            dbContext.Categories.Remove(exitingCategory);
+           await dbContext.SaveChangesAsync();
+            return exitingCategory;
         }
     }
 }
