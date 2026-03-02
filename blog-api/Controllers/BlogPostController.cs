@@ -58,5 +58,35 @@ namespace blog_api.Controllers
 
         }
 
+        //Get:https://localhost:7202/api/blogposts
+        [HttpGet]
+
+        public async Task<IActionResult> GetAllBlogPosts()
+        {
+            var blogPosts = await blogPostRepository.GetAllAsync();
+
+            //convert domain to DTO 
+            var response = new List<BlogPostDto>();
+            foreach (var blogPost in blogPosts)
+            {
+                response.Add(new BlogPostDto
+                {
+                    Id = blogPost.Id,
+                    Author = blogPost.Author,
+                    Content = blogPost.Content,
+                    FeaturedImageUrl = blogPost.FeaturedImageUrl,
+                    IsVisible = blogPost.IsVisible,
+                    PublishDate = blogPost.PublishDate,
+                    ShortDescription = blogPost.ShortDescription,
+                    Title = blogPost.Title,
+                    UrlHandle = blogPost.UrlHandle,
+
+
+                });
+            }
+            return Ok(response);
+
+        }
+
     }
 }
