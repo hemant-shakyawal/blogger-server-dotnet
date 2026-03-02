@@ -16,6 +16,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BlogConnetionSting"));
 });
 builder.Services.AddScoped<ICategoryRepository, CategoryRepossitory>();// call the categroryrepository
+
+builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();// call the BlogPostRepository
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
