@@ -11,12 +11,17 @@ namespace blog_api.Controllers
     public class BlogPostController : ControllerBase
     {
         private readonly IBlogPostRepository blogPostRepository;
-       public BlogPostController(IBlogPostRepository blogPostRepository)
+        private readonly ICategoryRepository categoryRepository;
+        public BlogPostController(IBlogPostRepository blogPostRepository, ICategoryRepository categoryRepository)
         {
           this.blogPostRepository=blogPostRepository;
+            this.categoryRepository=categoryRepository;
+          
         }
 
-       
+        public ICategoryRepository CategoryRepository { get; }
+
+
 
         //Post:https://localhost:7202/api/blogpost
 
@@ -34,9 +39,20 @@ namespace blog_api.Controllers
                 ShortDescription = request.ShortDescription,
                 Title = request.Title,
                 UrlHandle = request.UrlHandle,
+                Categories=new List<Category>()
 
 
             };
+
+            foreach (var categoryGuid in request.Categories)
+            {
+                var existingCategory=await categoryRepository.GetById(categoryGuid);
+
+                if (existingCategory is not null) { 
+                    blogPost.Categories.Add(existingCategory);
+                
+                }
+            }
 
             blogPost = await blogPostRepository.CreateAsync(blogPost);
             //convert domain to DTO 
@@ -51,6 +67,13 @@ namespace blog_api.Controllers
                 ShortDescription = blogPost.ShortDescription,
                 Title = blogPost.Title,
                 UrlHandle = blogPost.UrlHandle,
+                Categories= blogPost.Categories.Select(x=>new CategoryDto
+                {
+                    Id = x.Id,
+                    Name=x.Name,
+                    UrlHandle=x.UrlHandle
+
+                }).ToList()
             };
 
             return Ok(response);
@@ -80,6 +103,13 @@ namespace blog_api.Controllers
                     ShortDescription = blogPost.ShortDescription,
                     Title = blogPost.Title,
                     UrlHandle = blogPost.UrlHandle,
+                    Categories = blogPost.Categories.Select(x => new CategoryDto
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        UrlHandle = x.UrlHandle
+
+                    }).ToList()
 
 
                 });
