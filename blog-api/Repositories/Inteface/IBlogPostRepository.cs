@@ -6,5 +6,6 @@ namespace blog_api.Repositories.Inteface
     {
         Task<BlogPost> CreateAsync(BlogPost blogpost);
         Task<IEnumerable<BlogPost>> GetAllAsync();
+        Task<BlogPost?> GetById(Guid id);
     }
 }

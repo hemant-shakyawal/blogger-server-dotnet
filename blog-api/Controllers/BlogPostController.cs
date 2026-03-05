@@ -14,9 +14,9 @@ namespace blog_api.Controllers
         private readonly ICategoryRepository categoryRepository;
         public BlogPostController(IBlogPostRepository blogPostRepository, ICategoryRepository categoryRepository)
         {
-          this.blogPostRepository=blogPostRepository;
-            this.categoryRepository=categoryRepository;
-          
+            this.blogPostRepository = blogPostRepository;
+            this.categoryRepository = categoryRepository;
+
         }
 
         public ICategoryRepository CategoryRepository { get; }
@@ -26,11 +26,12 @@ namespace blog_api.Controllers
         //Post:https://localhost:7202/api/blogpost
 
         [HttpPost]
-        public async Task<IActionResult>CreateBlogPost([FromBody] CreateBlogPostRequestDto request)
+        public async Task<IActionResult> CreateBlogPost([FromBody] CreateBlogPostRequestDto request)
         {
 
             // convert DTo to domain
-            var blogPost = new BlogPost {
+            var blogPost = new BlogPost
+            {
                 Author = request.Author,
                 Content = request.Content,
                 FeaturedImageUrl = request.FeaturedImageUrl,
@@ -39,18 +40,19 @@ namespace blog_api.Controllers
                 ShortDescription = request.ShortDescription,
                 Title = request.Title,
                 UrlHandle = request.UrlHandle,
-                Categories=new List<Category>()
+                Categories = new List<Category>()
 
 
             };
 
             foreach (var categoryGuid in request.Categories)
             {
-                var existingCategory=await categoryRepository.GetById(categoryGuid);
+                var existingCategory = await categoryRepository.GetById(categoryGuid);
 
-                if (existingCategory is not null) { 
+                if (existingCategory is not null)
+                {
                     blogPost.Categories.Add(existingCategory);
-                
+
                 }
             }
 
@@ -67,11 +69,11 @@ namespace blog_api.Controllers
                 ShortDescription = blogPost.ShortDescription,
                 Title = blogPost.Title,
                 UrlHandle = blogPost.UrlHandle,
-                Categories= blogPost.Categories.Select(x=>new CategoryDto
+                Categories = blogPost.Categories.Select(x => new CategoryDto
                 {
                     Id = x.Id,
-                    Name=x.Name,
-                    UrlHandle=x.UrlHandle
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle
 
                 }).ToList()
             };
@@ -118,5 +120,38 @@ namespace blog_api.Controllers
 
         }
 
+        //Get:https://localhost:7202/api/blogpost/{Id}
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetBlogPostById([FromRoute] Guid id)
+        {
+            var blogPost = await blogPostRepository.GetById(id);
+            if (blogPost is null)
+            {
+                return NotFound();
+            }
+            var response = new BlogPostDto
+            {
+                Id = blogPost.Id,
+                Author = blogPost.Author,
+                Content = blogPost.Content,
+                FeaturedImageUrl = blogPost.FeaturedImageUrl,
+                IsVisible = blogPost.IsVisible,
+                PublishDate = blogPost.PublishDate,
+                ShortDescription = blogPost.ShortDescription,
+                Title = blogPost.Title,
+                UrlHandle = blogPost.UrlHandle,
+                Categories = blogPost.Categories.Select(x => new CategoryDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle
+
+                }).ToList()
+
+            };
+            return Ok(response);
+
+        }
     }
 }
