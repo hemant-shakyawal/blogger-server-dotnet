@@ -23,7 +23,7 @@ namespace blog_api.Repositories.Implementation
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync()
         {
-            return await dBContext.BlogPosts.ToListAsync();
+            return await dBContext.BlogPosts.Include(x=>x.Categories).ToListAsync();
            
         }
     }

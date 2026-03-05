@@ -1,4 +1,6 @@
-﻿namespace blog_api.Models.DTO
+﻿using blog_api.Models.Domain;
+
+namespace blog_api.Models.DTO
 {
     public class BlogPostDto
     {
@@ -12,6 +14,7 @@
         public DateTime PublishDate { get; set; }
         public string Author { get; set; }
         public bool IsVisible { get; set; }
+        public List<CategoryDto> Categories { get; set; }=new List<CategoryDto>();
 
     }
 }
