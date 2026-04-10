@@ -21,6 +21,11 @@ namespace blog_api.Repositories.Implementation
             return blogpost;
         }
 
+        public Task<BlogPost?> DeleteAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<BlogPost>> GetAllAsync()
         {
             return await dBContext.BlogPosts.Include(x=>x.Categories).ToListAsync();
@@ -30,6 +35,27 @@ namespace blog_api.Repositories.Implementation
         public async Task<BlogPost?> GetById(Guid id)
         {
             return await dBContext.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<BlogPost?> UpdateAsync(BlogPost blogPost)
+        {
+            var exitingBlogPost=await dBContext.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == blogPost.Id);
+
+            if (exitingBlogPost == null)
+            {
+                return null;
+            }
+            // Update blogpost
+
+            dBContext.Entry(exitingBlogPost).CurrentValues.SetValues(blogPost);
+
+            // Update categoreis
+
+            exitingBlogPost.Categories=blogPost.Categories;
+
+            await dBContext.SaveChangesAsync();
+
+            return blogPost;
         }
     }
 }
