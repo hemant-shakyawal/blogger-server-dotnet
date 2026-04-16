@@ -224,5 +224,35 @@ namespace blog_api.Controllers
             return Ok(response);
 
         }
+
+        //Delete :https://localhost:7202/api/blogpost/{Id}
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> DeleteBlogPost([FromRoute] Guid id)
+        {
+            var deleteBlogPost =await blogPostRepository.DeleteAsync(id);
+            if (deleteBlogPost == null) { return NotFound(); }
+
+            // convert Domain model to DTO
+
+            var response = new BlogPostDto
+            {
+                Id = deleteBlogPost.Id,
+                Author = deleteBlogPost.Author,
+                Content = deleteBlogPost.Content,
+                FeaturedImageUrl = deleteBlogPost.FeaturedImageUrl,
+                IsVisible = deleteBlogPost.IsVisible,
+                PublishDate = deleteBlogPost.PublishDate,
+                ShortDescription = deleteBlogPost.ShortDescription,
+                Title = deleteBlogPost.Title,
+                UrlHandle = deleteBlogPost.UrlHandle,
+
+            };
+            return Ok(response);
+
+
+        }
     }
+
+
 }
