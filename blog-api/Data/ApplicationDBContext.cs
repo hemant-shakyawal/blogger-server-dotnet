@@ -11,6 +11,8 @@ namespace blog_api.Data
 
         public DbSet<BlogPost> BlogPosts { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Blogimage> Blogimages { get; set; }
+
 
 
     }
