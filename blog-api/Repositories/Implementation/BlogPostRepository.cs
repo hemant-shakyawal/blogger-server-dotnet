@@ -43,6 +43,12 @@ namespace blog_api.Repositories.Implementation
             return await dBContext.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(c => c.Id == id);
         }
 
+        public async Task<BlogPost?> GetByUrlHandle(string urlHandle)
+        {
+            return await dBContext.BlogPosts.Include(x=>x.Categories).FirstOrDefaultAsync(c=>c.UrlHandle== urlHandle);
+
+        } 
+
         public async Task<BlogPost?> UpdateAsync(BlogPost blogPost)
         {
             var exitingBlogPost=await dBContext.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == blogPost.Id);

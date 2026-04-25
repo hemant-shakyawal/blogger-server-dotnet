@@ -9,5 +9,7 @@ namespace blog_api.Repositories.Inteface
         Task<BlogPost?> GetById(Guid id);
         Task<BlogPost?> UpdateAsync(BlogPost blogpost);
         Task<BlogPost?> DeleteAsync(Guid id);
+
+        Task<BlogPost?> GetByUrlHandle(string urlHandle);
     }
 }
