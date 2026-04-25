@@ -1,6 +1,7 @@
 ﻿using blog_api.Models.Domain;
 using blog_api.Models.DTO;
 using blog_api.Repositories.Inteface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,7 @@ namespace blog_api.Controllers
         //Post:https://localhost:7202/api/blogpost
 
         [HttpPost]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateBlogPost([FromBody] CreateBlogPostRequestDto request)
         {
 
@@ -154,9 +156,48 @@ namespace blog_api.Controllers
 
         }
 
+        //Get :https://localhost:7202/api/blogposts/{urlHandler}
+        [HttpGet]
+        [Route("{urlHandle}")]
+        public async Task<IActionResult> GetBlogPostByUrlHandle([FromRoute] string urlHandle)
+        {
+
+            // get blogpost details from repository
+          var blogPostDetails=  await blogPostRepository.GetByUrlHandle(urlHandle);
+
+
+            if (blogPostDetails is null)
+            {
+                return NotFound();
+            }
+            var response = new BlogPostDto
+            {
+                Id = blogPostDetails.Id,
+                Author = blogPostDetails.Author,
+                Content = blogPostDetails.Content,
+                FeaturedImageUrl = blogPostDetails.FeaturedImageUrl,
+                IsVisible = blogPostDetails.IsVisible,
+                PublishDate = blogPostDetails.PublishDate,
+                ShortDescription = blogPostDetails.ShortDescription,
+                Title = blogPostDetails.Title,
+                UrlHandle = blogPostDetails.UrlHandle,
+                Categories = blogPostDetails.Categories.Select(x => new CategoryDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle
+
+                }).ToList()
+
+            };
+            return Ok(response);
+        }
+
+
         //Put:https://localhost:7202/api/blogpost/{Id}
         [HttpPut]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpddateBlogPost([FromRoute] Guid id, UpdateBlogPostRequestDto request)
         {
 
@@ -228,6 +269,7 @@ namespace blog_api.Controllers
         //Delete :https://localhost:7202/api/blogpost/{Id}
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteBlogPost([FromRoute] Guid id)
         {
             var deleteBlogPost =await blogPostRepository.DeleteAsync(id);
